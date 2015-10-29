@@ -1,0 +1,165 @@
+create table student(
+	student_id integer not null primary key,
+	name varcahr(10) not null,
+	year tinyint not null default "1",
+	dept_no integer not null,
+	major varchar(20)
+);
+
+create table department(
+	dept_no integer not null primary key auto_increment,
+	dept_name varchar(20) not null unique,
+	office varchar(20) not null,
+	office_tel varchar(13)
+);
+
+
+
+
+alter table student change column major major varchar(40);
+
+alter table student ADD column gender varchar(10);
+
+alter table department change column dept_name dept_name varchar(40) not null;
+
+alter table department change column office office varchar(30) not null;
+
+
+
+
+insert into student(student_id, name, year, dept_no, major) VALUES 
+(20070002, 'James Bond', 3, 4, 'Business Administration'), 
+(20060001, 'Queenie', 4, 4, 'Business Administration'), 
+(20030001, 'Reonardo', 4, 2, 'Electronic Engineering'), 
+(20040003, 'Julia', 3, 2, 'Electronic Engineering'), 
+(20060002, 'Roosevelt', 3, 1, 'Computer Science'), 
+(20100002, 'Fearne', 3, 4, 'Business Administration'), 
+(20110001, 'Chloe', 2, 1, 'Computer Science'), 
+(20080003, 'Amy', 4, 3, 'Law'), 
+(20040002, 'Selina', 4, 5, 'English Literature'), 
+(20070001, 'Ellen', 4, 4, 'Business Administration'), 
+(20100001, 'Kathy', 3, 4, 'Business Administration'), 
+(20110002, 'Lucy', 2, 2, 'Electronic Engineering'), 
+(20030002, 'Michelle', 5, 1, 'Computer Science'), 
+(20070003, 'April', 4, 3, 'Law'), 
+(20070005, 'Alicia', 2, 5, 'English Literature'), 
+(20100003, 'Yullia', 3, 1, 'Computer Science'), 
+(20070007, 'Ashlee', 2, 4, 'Business Administration')
+
+insert into department(dept_name, office, office_tel) VALUES 
+('Computer Science', 'Engineering building', '02-3290-0123'), 
+('Electronic Engineering', 'Engineering building', '02-3290-2345'), 
+('Law', 'Law building', '02-3290-7896'), 
+('Business Administration', 'Administration building', '02-3290-1112'), 
+('English Literature', 'Literature building', '02-3290-4412');
+
+
+
+
+
+update department set dept_name = 'Electronic and Electrical Engineering' where dept_name = 'Electronic Engineering';
+
+insert into department(dept_name, office, office_tel) VALUES ('Education', 'Education building', '02-3290-2347');
+
+update student set dept_no = 6, major = 'Education' where name = 'Chloe';
+
+delete from student where name = 'Michelle';
+
+delete from student where name = 'Fearne';
+
+
+
+
+
+select * from student where major = 'Computer science';
+
+select student_id, year, major from student;
+
+select * from student where year = 3;
+
+select * from student where year = 1 or year = 2;
+
+select * from student where dept_no = 4;
+
+
+
+
+
+select * from student where student_id like '2007%';
+
+select * from student order by student_id;
+
+select major from student group by major having avg(year) > 3;
+
+select * from student where major = ‘Business Administration’ and student_id like '2007%' limit 2;
+
+
+
+
+create database imdb_small;
+
+use imdb_small;
+
+select r.role 
+from roles r join movies m on r.movie_id = m.id 
+where m.name = 'Pi';
+
+select distinct a.first_name, a.last_name
+from roles r join actors a on r.actor_id = a.id
+where m.name = 'Pi';
+
+select distinct first_name, last_name
+from movies m 
+join roles r on m.id = r.movie_id
+join actors a on r.actor_id = a.id 
+where m.name = 'Kill Bill: Vol.1' and m.name = "Kill Bill: Vol.2";
+
+select distinct a.first_name, a.last_name
+from actors a
+join roles r on a.id = r.actor_id
+join movies m on m.id = r.movie_id
+group by a.id
+having count(a.id) > any 
+(select count(a.id) 
+from actors a
+join roles r on a.id = r.actor_id
+join movies m on m.id = r.movie_id
+group by a.id)
+order by count(a.id) desc
+limit 7;
+
+select distinct mg.genre
+from movie m
+join movies_genres mg on m.id = mg.movie_id
+group by mg.genre
+having sum(m.rank) > any
+(select sum(m.rank)
+from movie m
+join movies_genres mg on m.id = mg.movie_id
+group by mg.genre
+)
+order by sum(m.rank) desc
+limit 3;
+
+select distinct d.first_name, d.last_name
+from directors d
+join movies_directors md on d.id = md.director_id
+join movies_genres mg on mg.movie_id = md movie_id
+group by mg.genre
+having count(mg.genre) > any
+(select count(mg.genre)
+from directors d
+join movies_directors md on d.id = md.director_id
+join movies_genres mg on mg.movie_id = md movie_id
+group by mg.genre)
+order by count(mg.genre) desc
+limit 1;
+
+
+
+
+
+create database simpsons;
+
+use simpsons;
+
