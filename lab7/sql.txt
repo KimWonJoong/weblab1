@@ -112,7 +112,7 @@ select distinct first_name, last_name
 from movies m 
 join roles r on m.id = r.movie_id
 join actors a on r.actor_id = a.id 
-where m.name = 'Kill Bill: Vol.1' and m.name = "Kill Bill: Vol.2";
+where m.name = "Kill Bill: Vol.1" and m.name = "Kill Bill: Vol.2";
 
 select distinct a.first_name, a.last_name
 from actors a
@@ -162,4 +162,22 @@ limit 1;
 create database simpsons;
 
 use simpsons;
+
+select g.grade
+from courses c 
+join grades g on c.id = g.student_id
+where c.name = "Computer science 143"
+
+select s.name, g.grade
+join grades g
+join courses c on c.id = g.course_id
+join students s on s.id = g.student_id
+where c.name = "Computer Science 143" and g.grade < "B-";
+
+
+select s.name, c.name, g.grade
+from grades g
+join courses c on c.id = g.course_id
+join students s on s.id = g.student_id
+where g.grade <= 'B-';
 
